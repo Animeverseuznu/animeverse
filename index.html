@@ -3,263 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANIMEVERSE</title>
+    <title>ANIMEVERSE UZ</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="app">
+<header class="topbar">
 
-    <header>
+    <div class="brand">
+        <span class="brand-icon">🌌</span>
         <div>
-            <h1>🌌 ANIMEVERSE</h1>
-            <p>Anime olamiga xush kelibsiz</p>
+            <h1>ANIMEVERSE</h1>
+            <small>UZ ANIME UNIVERSE</small>
+        </div>
+    </div>
+
+    <button class="profile-btn" onclick="openProfile()">
+        👤
+    </button>
+
+</header>
+
+
+<main>
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <span class="badge">🔥 BUGUNGI TOP</span>
+
+            <h2>Anime olamiga<br>
+                <span>sayohatni boshlang</span>
+            </h2>
+
+            <p>
+                Sevimli animelaringizni toping,
+                yangi qismlarni kuzating va
+                ANIMEVERSE olamiga qo‘shiling.
+            </p>
+
+            <button class="primary-btn" onclick="openAnime('solo')">
+                ▶ TOMOSHA QILISH
+            </button>
+
         </div>
 
-        <button onclick="openPage('profile')">👤</button>
-    </header>
+    </section>
 
-    <main>
 
-        <section id="home" class="page active">
+    <!-- SEARCH -->
 
-            <div class="hero">
-                <div class="badge">🔥 TRENDING</div>
+    <section class="search-section">
 
-                <h2>
-                    Sevimli animelaringiz
-                    shu yerda
-                </h2>
+        <div class="search-box">
 
-                <p>
-                    Eng mashhur anime va seriallarni
-                    qulay tarzda toping.
-                </p>
+            <span>🔎</span>
 
-                <button
-                    class="main-button"
-                    onclick="openPage('top')"
-                >
-                    🔥 TOP ANIMELAR
-                </button>
-            </div>
+            <input
+                id="searchInput"
+                type="text"
+                placeholder="Anime qidirish..."
+                oninput="searchAnime()"
+            >
 
-            <h3>🔥 Bugungi TOP</h3>
+        </div>
 
-            <div class="cards">
+    </section>
 
-                <div class="card" onclick="anime('One Piece')">
-                    <div class="poster">🏴‍☠️</div>
-                    <b>One Piece</b>
-                    <span>⭐ 9.8</span>
-                </div>
 
-                <div class="card" onclick="anime('Naruto')">
-                    <div class="poster">🍥</div>
-                    <b>Naruto</b>
-                    <span>⭐ 9.5</span>
-                </div>
+    <!-- CATEGORIES -->
 
-                <div class="card" onclick="anime('Solo Leveling')">
-                    <div class="poster">⚡</div>
-                    <b>Solo Leveling</b>
-                    <span>⭐ 9.7</span>
-                </div>
+    <section class="section">
 
-            </div>
+        <div class="section-title">
 
-            <h3>🆕 Yangi animelar</h3>
+            <h2>🎭 Janrlar</h2>
 
-            <div class="list">
+            <button onclick="showAllGenres()">
+                Barchasi →
+            </button>
 
-                <div class="list-item">
-                    <div class="icon">⚔️</div>
-                    <div>
-                        <b>Attack on Titan</b>
-                        <small>⭐ 9.6 • 89 qism</small>
-                    </div>
-                    <button onclick="anime('Attack on Titan')">
-                        →
-                    </button>
-                </div>
+        </div>
 
-                <div class="list-item">
-                    <div class="icon">🔥</div>
-                    <div>
-                        <b>Demon Slayer</b>
-                        <small>⭐ 9.4 • 55 qism</small>
-                    </div>
-                    <button onclick="anime('Demon Slayer')">
-                        →
-                    </button>
-                </div>
+        <div class="genre-list">
 
-            </div>
+            <button onclick="filterGenre('Action')">
+                ⚔️ Action
+            </button>
 
-        </section>
+            <button onclick="filterGenre('Romance')">
+                ❤️ Romance
+            </button>
 
+            <button onclick="filterGenre('Fantasy')">
+                🧙 Fantasy
+            </button>
 
-        <section id="top" class="page">
+            <button onclick="filterGenre('Comedy')">
+                😂 Comedy
+            </button>
 
-            <h2>🔥 TOP ANIMELAR</h2>
+            <button onclick="filterGenre('Horror')">
+                👻 Horror
+            </button>
 
-            <div class="ranking">
-                <div>🥇 One Piece <span>⭐ 9.8</span></div>
-                <div>🥈 Naruto <span>⭐ 9.5</span></div>
-                <div>🥉 Attack on Titan <span>⭐ 9.6</span></div>
-                <div>4️⃣ Demon Slayer <span>⭐ 9.4</span></div>
-                <div>5️⃣ Solo Leveling <span>⭐ 9.7</span></div>
-            </div>
+        </div>
 
-        </section>
+    </section>
 
 
-        <section id="search" class="page">
+    <!-- TOP ANIME -->
 
-            <h2>🔎 QIDIRUV</h2>
+    <section class="section">
 
-            <div class="search">
-                <input
-                    id="searchInput"
-                    type="text"
-                    placeholder="Anime nomini yozing..."
-                >
+        <div class="section-title">
 
-                <button onclick="searchAnime()">🔎</button>
-            </div>
+            <h2>🔥 TOP ANIME</h2>
 
-            <div id="result"></div>
+            <button onclick="showTopAnime()">
+                Barchasi →
+            </button>
 
-        </section>
+        </div>
 
+        <div id="topAnime" class="anime-grid"></div>
 
-        <section id="genres" class="page">
+    </section>
 
-            <h2>🎭 JANRLAR</h2>
 
-            <div class="genres">
+    <!-- NEW -->
 
-                <button>⚔️ Action</button>
-                <button>❤️ Romance</button>
-                <button>😂 Comedy</button>
-                <button>👻 Horror</button>
-                <button>🧙 Fantasy</button>
-                <button>🚀 Sci-Fi</button>
-                <button>🧠 Psychological</button>
-                <button>🥷 Ninja</button>
-                <button>🏫 School</button>
-                <button>🏆 Sport</button>
+    <section class="section">
 
-            </div>
+        <div class="section-title">
 
-        </section>
+            <h2>🆕 Yangi qo‘shilganlar</h2>
 
+            <button onclick="showNewAnime()">
+                Barchasi →
+            </button>
 
-        <section id="vip" class="page">
+        </div>
 
-            <div class="vip">
+        <div id="newAnime" class="anime-grid"></div>
 
-                <div class="crown">👑</div>
+    </section>
 
-                <h2>ANIMEVERSE VIP</h2>
 
-                <p>
-                    Maxsus anime va premium
-                    kontentlarga ega bo‘ling.
-                </p>
+    <!-- VIP -->
 
-                <div class="benefits">
-                    <div>👑 VIP Anime</div>
-                    <div>⚡ Erta kirish</div>
-                    <div>💎 Premium kontent</div>
-                    <div>🎁 VIP bonus</div>
-                </div>
+    <section class="vip-section">
 
-                <button class="vip-button">
-                    👑 VIP OLISH
-                </button>
+        <div>
 
-            </div>
+            <span class="vip-icon">👑</span>
 
-        </section>
+            <h2>ANIMEVERSE VIP</h2>
 
+            <p>
+                Maxsus anime va yangi qismlarga
+                erta kirish imkoniyatiga ega bo‘ling.
+            </p>
 
-        <section id="profile" class="page">
+        </div>
 
-            <div class="profile">
-
-                <div class="avatar">👤</div>
-
-                <h2>Anime Hunter</h2>
-
-                <p>🏆 Level 7</p>
-
-                <div class="xp">
-                    <div></div>
-                </div>
-
-                <small>780 / 1000 XP</small>
-
-            </div>
-
-            <div class="stats">
-
-                <div>
-                    <b>43</b>
-                    <small>Ko‘rilgan</small>
-                </div>
-
-                <div>
-                    <b>12</b>
-                    <small>Sevimli</small>
-                </div>
-
-                <div>
-                    <b>7</b>
-                    <small>Streak</small>
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <nav>
-
-        <button onclick="openPage('home')">
-            🏠
-            <small>Bosh</small>
+        <button onclick="openVIP()">
+            VIP → 
         </button>
 
-        <button onclick="openPage('top')">
-            🔥
-            <small>TOP</small>
+    </section>
+
+
+    <!-- CONTENT -->
+
+    <section id="contentSection" class="section hidden">
+
+        <div class="section-title">
+
+            <h2 id="contentTitle">Anime</h2>
+
+            <button onclick="goHome()">
+                ← Orqaga
+            </button>
+
+        </div>
+
+        <div id="contentGrid" class="anime-grid"></div>
+
+    </section>
+
+</main>
+
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom-nav">
+
+    <button class="active" onclick="goHome()">
+        <span>🏠</span>
+        <small>Bosh sahifa</small>
+    </button>
+
+    <button onclick="showTopAnime()">
+        <span>🔥</span>
+        <small>TOP</small>
+    </button>
+
+    <button onclick="focusSearch()">
+        <span>🔎</span>
+        <small>Qidiruv</small>
+    </button>
+
+    <button onclick="showNewAnime()">
+        <span>🆕</span>
+        <small>Yangi</small>
+    </button>
+
+    <button onclick="openProfile()">
+        <span>👤</span>
+        <small>Profil</small>
+    </button>
+
+</nav>
+
+
+<!-- ANIME MODAL -->
+
+<div id="animeModal" class="modal">
+
+    <div class="modal-box">
+
+        <button class="close-btn" onclick="closeModal()">
+            ✕
         </button>
 
-        <button onclick="openPage('search')">
-            🔎
-            <small>Qidiruv</small>
-        </button>
+        <div id="modalPoster" class="modal-poster"></div>
 
-        <button onclick="openPage('genres')">
-            🎭
-            <small>Janr</small>
-        </button>
+        <div class="modal-content">
 
-        <button onclick="openPage('profile')">
-            👤
-            <small>Profil</small>
-        </button>
+            <span id="modalBadge" class="badge">
+                ANIME
+            </span>
 
-    </nav>
+            <h2 id="modalTitle">
+                Anime
+            </h2>
+
+            <p id="modalDescription">
+                Tavsif
+            </p>
+
+            <div id="modalGenres" class="modal-genres"></div>
+
+            <button class="primary-btn" onclick="startWatching()">
+                ▶ TOMOSHA QILISH
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<!-- PROFILE MODAL -->
+
+<div id="profileModal" class="modal">
+
+    <div class="modal-box profile-box">
+
+        <button class="close-btn" onclick="closeProfile()">
+            ✕
+        </button>
+
+        <div class="avatar">
+            👤
+        </div>
+
+        <h2>ANIMEVERSE PROFIL</h2>
+
+        <p>
+            Telegram orqali kirilgan foydalanuvchi
+        </p>
+
+        <div class="profile-stats">
+
+            <div>
+                <strong id="watchCount">0</strong>
+                <span>Ko‘rilgan</span>
+            </div>
+
+            <div>
+                <strong>0</strong>
+                <span>XP</span>
+            </div>
+
+            <div>
+                <strong>FREE</strong>
+                <span>Status</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 <script src="app.js"></script>
 
 </body>
-</html
+</html>
