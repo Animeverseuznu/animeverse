@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANIMEVERSE UZ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+        <span class="brand-icon">🌌</span>
+        <div>
+            <h1>ANIMEVERSE</h1>
+            <small>UZ ANIME UNIVERSE</small>
+        </div>
+    </div>
+
+    <button class="profile-btn" onclick="openProfile()">
+        👤
+    </button>
+
+</header>
+
+
+<main>
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <span class="badge">🔥 BUGUNGI TOP</span>
+
+            <h2>Anime olamiga<br>
+                <span>sayohatni boshlang</span>
+            </h2>
+
+            <p>
+                Sevimli animelaringizni toping,
+                yangi qismlarni kuzating va
+                ANIMEVERSE olamiga qo‘shiling.
+            </p>
+
+            <button class="primary-btn" onclick="openAnime('solo')">
+                ▶ TOMOSHA QILISH
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- SEARCH -->
+
+    <section class="search-section">
+
+        <div class="search-box">
+
+            <span>🔎</span>
+
+            <input
+                id="searchInput"
+                type="text"
+                placeholder="Anime qidirish..."
+                oninput="searchAnime()"
+            >
+
+        </div>
+
+    </section>
+
+
+    <!-- CATEGORIES -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <h2>🎭 Janrlar</h2>
+
+            <button onclick="showAllGenres()">
+                Barchasi →
+            </button>
+
+        </div>
+
+        <div class="genre-list">
+
+            <button onclick="filterGenre('Action')">
+                ⚔️ Action
+            </button>
+
+            <button onclick="filterGenre('Romance')">
+                ❤️ Romance
+            </button>
+
+            <button onclick="filterGenre('Fantasy')">
+                🧙 Fantasy
+            </button>
+
+            <button onclick="filterGenre('Comedy')">
+                😂 Comedy
+            </button>
+
+            <button onclick="filterGenre('Horror')">
+                👻 Horror
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- TOP ANIME -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <h2>🔥 TOP ANIME</h2>
+
+            <button onclick="showTopAnime()">
+                Barchasi →
+            </button>
+
+        </div>
+
+        <div id="topAnime" class="anime-grid"></div>
+
+    </section>
+
+
+    <!-- NEW -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <h2>🆕 Yangi qo‘shilganlar</h2>
+
+            <button onclick="showNewAnime()">
+                Barchasi →
+            </button>
+
+        </div>
+
+        <div id="newAnime" class="anime-grid"></div>
+
+    </section>
+
+
+    <!-- VIP -->
+
+    <section class="vip-section">
+
+        <div>
+
+            <span class="vip-icon">👑</span>
+
+            <h2>ANIMEVERSE VIP</h2>
+
+            <p>
+                Maxsus anime va yangi qismlarga
+                erta kirish imkoniyatiga ega bo‘ling.
+            </p>
+
+        </div>
+
+        <button onclick="openVIP()">
+            VIP → 
+        </button>
+
+    </section>
+
+
+    <!-- CONTENT -->
+
+    <section id="contentSection" class="section hidden">
+
+        <div class="section-title">
+
+            <h2 id="contentTitle">Anime</h2>
+
+            <button onclick="goHome()">
+                ← Orqaga
+            </button>
+
+        </div>
+
+        <div id="contentGrid" class="anime-grid"></div>
+
+    </section>
+
+</main>
+
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom-nav">
+
+    <button class="active" onclick="goHome()">
+        <span>🏠</span>
+        <small>Bosh sahifa</small>
+    </button>
+
+    <button onclick="showTopAnime()">
+        <span>🔥</span>
+        <small>TOP</small>
+    </button>
+
+    <button onclick="focusSearch()">
+        <span>🔎</span>
+        <small>Qidiruv</small>
+    </button>
+
+    <button onclick="showNewAnime()">
+        <span>🆕</span>
+        <small>Yangi</small>
+    </button>
+
+    <button onclick="openProfile()">
+        <span>👤</span>
+        <small>Profil</small>
+    </button>
+
+</nav>
+
+
+<!-- ANIME MODAL -->
+
+<div id="animeModal" class="modal">
+
+    <div class="modal-box">
+
+        <button class="close-btn" onclick="closeModal()">
+            ✕
+        </button>
+
+        <div id="modalPoster" class="modal-poster"></div>
+
+        <div class="modal-content">
+
+            <span id="modalBadge" class="badge">
+                ANIME
+            </span>
+
+            <h2 id="modalTitle">
+                Anime
+            </h2>
+
+            <p id="modalDescription">
+                Tavsif
+            </p>
+
+            <div id="modalGenres" class="modal-genres"></div>
+
+            <button class="primary-btn" onclick="startWatching()">
+                ▶ TOMOSHA QILISH
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- PROFILE MODAL -->
+
+<div id="profileModal" class="modal">
+
+    <div class="modal-box profile-box">
+
+        <button class="close-btn" onclick="closeProfile()">
+            ✕
+        </button>
+
+        <div class="avatar">
+            👤
+        </div>
+
+        <h2>ANIMEVERSE PROFIL</h2>
+
+        <p>
+            Telegram orqali kirilgan foydalanuvchi
+        </p>
+
+        <div class="profile-stats">
+
+            <div>
+                <strong id="watchCount">0</strong>
+                <span>Ko‘rilgan</span>
+            </div>
+
+            <div>
+                <strong>0</strong>
+                <span>XP</span>
+            </div>
+
+            <div>
+                <strong>FREE</strong>
+                <span>Status</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANIMEVERSE</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <header>
+        <div>
+            <h1>🌌 ANIMEVERSE</h1>
+            <p>Anime olamiga xush kelibsiz</p>
+        </div>
+
+        <button onclick="openPage('profile')">👤</button>
+    </header>
+
+    <main>
+
+        <section id="home" class="page active">
+
+            <div class="hero">
+                <div class="badge">🔥 TRENDING</div>
+
+                <h2>
+                    Sevimli animelaringiz
+                    shu yerda
+                </h2>
+
+                <p>
+                    Eng mashhur anime va seriallarni
+                    qulay tarzda toping.
+                </p>
+
+                <button
+                    class="main-button"
+                    onclick="openPage('top')"
+                >
+                    🔥 TOP ANIMELAR
+                </button>
+            </div>
+
+            <h3>🔥 Bugungi TOP</h3>
+
+            <div class="cards">
+
+                <div class="card" onclick="anime('One Piece')">
+                    <div class="poster">🏴‍☠️</div>
+                    <b>One Piece</b>
+                    <span>⭐ 9.8</span>
+                </div>
+
+                <div class="card" onclick="anime('Naruto')">
+                    <div class="poster">🍥</div>
+                    <b>Naruto</b>
+                    <span>⭐ 9.5</span>
+                </div>
+
+                <div class="card" onclick="anime('Solo Leveling')">
+                    <div class="poster">⚡</div>
+                    <b>Solo Leveling</b>
+                    <span>⭐ 9.7</span>
+                </div>
+
+            </div>
+
+            <h3>🆕 Yangi animelar</h3>
+
+            <div class="list">
+
+                <div class="list-item">
+                    <div class="icon">⚔️</div>
+                    <div>
+                        <b>Attack on Titan</b>
+                        <small>⭐ 9.6 • 89 qism</small>
+                    </div>
+                    <button onclick="anime('Attack on Titan')">
+                        →
+                    </button>
+                </div>
+
+                <div class="list-item">
+                    <div class="icon">🔥</div>
+                    <div>
+                        <b>Demon Slayer</b>
+                        <small>⭐ 9.4 • 55 qism</small>
+                    </div>
+                    <button onclick="anime('Demon Slayer')">
+                        →
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section id="top" class="page">
+
+            <h2>🔥 TOP ANIMELAR</h2>
+
+            <div class="ranking">
+                <div>🥇 One Piece <span>⭐ 9.8</span></div>
+                <div>🥈 Naruto <span>⭐ 9.5</span></div>
+                <div>🥉 Attack on Titan <span>⭐ 9.6</span></div>
+                <div>4️⃣ Demon Slayer <span>⭐ 9.4</span></div>
+                <div>5️⃣ Solo Leveling <span>⭐ 9.7</span></div>
+            </div>
+
+        </section>
+
+
+        <section id="search" class="page">
+
+            <h2>🔎 QIDIRUV</h2>
+
+            <div class="search">
+                <input
+                    id="searchInput"
+                    type="text"
+                    placeholder="Anime nomini yozing..."
+                >
+
+                <button onclick="searchAnime()">🔎</button>
+            </div>
+
+            <div id="result"></div>
+
+        </section>
+
+
+        <section id="genres" class="page">
+
+            <h2>🎭 JANRLAR</h2>
+
+            <div class="genres">
+
+                <button>⚔️ Action</button>
+                <button>❤️ Romance</button>
+                <button>😂 Comedy</button>
+                <button>👻 Horror</button>
+                <button>🧙 Fantasy</button>
+                <button>🚀 Sci-Fi</button>
+                <button>🧠 Psychological</button>
+                <button>🥷 Ninja</button>
+                <button>🏫 School</button>
+                <button>🏆 Sport</button>
+
+            </div>
+
+        </section>
+
+
+        <section id="vip" class="page">
+
+            <div class="vip">
+
+                <div class="crown">👑</div>
+
+                <h2>ANIMEVERSE VIP</h2>
+
+                <p>
+                    Maxsus anime va premium
+                    kontentlarga ega bo‘ling.
+                </p>
+
+                <div class="benefits">
+                    <div>👑 VIP Anime</div>
+                    <div>⚡ Erta kirish</div>
+                    <div>💎 Premium kontent</div>
+                    <div>🎁 VIP bonus</div>
+                </div>
+
+                <button class="vip-button">
+                    👑 VIP OLISH
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <section id="profile" class="page">
+
+            <div class="profile">
+
+                <div class="avatar">👤</div>
+
+                <h2>Anime Hunter</h2>
+
+                <p>🏆 Level 7</p>
+
+                <div class="xp">
+                    <div></div>
+                </div>
+
+                <small>780 / 1000 XP</small>
+
+            </div>
+
+            <div class="stats">
+
+                <div>
+                    <b>43</b>
+                    <small>Ko‘rilgan</small>
+                </div>
+
+                <div>
+                    <b>12</b>
+                    <small>Sevimli</small>
+                </div>
+
+                <div>
+                    <b>7</b>
+                    <small>Streak</small>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <nav>
+
+        <button onclick="openPage('home')">
+            🏠
+            <small>Bosh</small>
+        </button>
+
+        <button onclick="openPage('top')">
+            🔥
+            <small>TOP</small>
+        </button>
+
+        <button onclick="openPage('search')">
+            🔎
+            <small>Qidiruv</small>
+        </button>
+
+        <button onclick="openPage('genres')">
+            🎭
+            <small>Janr</small>
+        </button>
+
+        <button onclick="openPage('profile')">
+            👤
+            <small>Profil</small>
+        </button>
+
+    </nav>
+
+</div>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html

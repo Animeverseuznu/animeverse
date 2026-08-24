@@ -2,11 +2,18 @@ import asyncio
 
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
-from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup
-from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import (
+    Message,
+    ReplyKeyboardMarkup,
+    KeyboardButton,
+)
 
-from config import BOT_TOKEN, ADMIN_ID, VIP_CARD, VIP_PACKAGES
+from config import (
+    BOT_TOKEN,
+    ADMIN_ID,
+    VIP_CARD,
+    VIP_PACKAGES,
+)
 
 from db import (
     init_db,
@@ -27,105 +34,159 @@ from db import (
     get_pending_payment,
 )
 
+
 dp = Dispatcher()
 
 
-class AddAnime(StatesGroup):
-    code = State()
-    title = State()
-    description = State()
-    genre = State()
-    poster = State()
-    vip = State()
+# =========================================================
+# 🎨 PASTKI ASOSIY MENYU
+# =========================================================
 
-
-class AddEpisode(StatesGroup):
-    code = State()
-    episode = State()
-    video = State()
-
-
-def main_menu():
-    return InlineKeyboardMarkup(
-        inline_keyboard=[
+def main_keyboard():
+    return ReplyKeyboardMarkup(
+        keyboard=[
             [
-                InlineKeyboardButton(
-                    text="🔎 Anime qidirish",
-                    callback_data="search"
-                )
+                KeyboardButton(text="🔥 TOP ANIME"),
+                KeyboardButton(text="🆕 YANGILAR"),
             ],
             [
-                InlineKeyboardButton(
-                    text="👤 Profil",
-                    callback_data="profile"
-                ),
-                InlineKeyboardButton(
-                    text="📚 Tarix",
-                    callback_data="history"
-                )
+                KeyboardButton(text="🎭 JANRLAR"),
+                KeyboardButton(text="🔎 QIDIRUV"),
             ],
             [
-                InlineKeyboardButton(
-                    text="👑 VIP",
-                    callback_data="vip"
-                )
+                KeyboardButton(text="📺 SERIAL"),
+                KeyboardButton(text="🎞 FILMLAR"),
             ],
-        ]
+            [
+                KeyboardButton(text="🇯🇵 ANIME"),
+                KeyboardButton(text="🇨🇳 DONGHUA"),
+            ],
+            [
+                KeyboardButton(text="❤️ SEVIMLILAR"),
+            ],
+            [
+                KeyboardButton(text="📚 DAVOM ETTIRISH"),
+            ],
+            [
+                KeyboardButton(text="🎁 KUNLIK BONUS"),
+                KeyboardButton(text="🏆 REYTING"),
+            ],
+            [
+                KeyboardButton(text="👤 PROFIL"),
+                KeyboardButton(text="⚙️ SOZLAMALAR"),
+            ],
+            [
+                KeyboardButton(text="👑 VIP ZONA"),
+            ],
+            [
+                KeyboardButton(text="💬 YORDAM"),
+            ],
+        ],
+        resize_keyboard=True,
+        is_persistent=True,
+        input_field_placeholder="Menyudan bo‘lim tanlang..."
     )
 
 
-def vip_menu():
-    return InlineKeyboardMarkup(
-        inline_keyboard=[
+# =========================================================
+# 🎭 JANRLAR MENYUSI
+# =========================================================
+
+def genre_keyboard():
+    return ReplyKeyboardMarkup(
+        keyboard=[
             [
-                InlineKeyboardButton(
-                    text="👑 1 oy — 30 000 so‘m",
-                    callback_data="buy_30"
-                )
+                KeyboardButton(text="⚔️ Action"),
+                KeyboardButton(text="❤️ Romance"),
             ],
             [
-                InlineKeyboardButton(
-                    text="👑 3 oy — 70 000 so‘m",
-                    callback_data="buy_90"
-                )
+                KeyboardButton(text="😂 Comedy"),
+                KeyboardButton(text="👻 Horror"),
             ],
             [
-                InlineKeyboardButton(
-                    text="👑 6 oy — 120 000 so‘m",
-                    callback_data="buy_180"
-                )
+                KeyboardButton(text="🧙 Fantasy"),
+                KeyboardButton(text="🚀 Sci-Fi"),
             ],
             [
-                InlineKeyboardButton(
-                    text="👑 1 yil — 200 000 so‘m",
-                    callback_data="buy_365"
-                )
+                KeyboardButton(text="🧠 Psychological"),
+                KeyboardButton(text="🥷 Ninja"),
             ],
-        ]
+            [
+                KeyboardButton(text="🏫 School"),
+                KeyboardButton(text="🏆 Sport"),
+            ],
+            [
+                KeyboardButton(text="🔙 BOSH MENU"),
+            ],
+        ],
+        resize_keyboard=True,
+        is_persistent=True,
     )
 
 
-def admin_menu():
-    return InlineKeyboardMarkup(
-        inline_keyboard=[
+# =========================================================
+# 👑 VIP MENYU
+# =========================================================
+
+def vip_keyboard():
+    return ReplyKeyboardMarkup(
+        keyboard=[
             [
-                InlineKeyboardButton(
-                    text="➕ Anime qo‘shish",
-                    callback_data="admin_anime"
-                )
+                KeyboardButton(text="👑 VIP ANIMELAR"),
             ],
             [
-                InlineKeyboardButton(
-                    text="🎥 Qism/video qo‘shish",
-                    callback_data="admin_episode"
-                )
+                KeyboardButton(text="💳 VIP OLISH"),
+                KeyboardButton(text="📅 VIP HOLATI"),
             ],
-        ]
+            [
+                KeyboardButton(text="💎 VIP AFZALLIKLAR"),
+            ],
+            [
+                KeyboardButton(text="🔙 BOSH MENU"),
+            ],
+        ],
+        resize_keyboard=True,
+        is_persistent=True,
     )
 
+
+# =========================================================
+# 🛠 ADMIN MENYU
+# =========================================================
+
+def admin_keyboard():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [
+                KeyboardButton(text="➕ ANIME QO‘SHISH"),
+            ],
+            [
+                KeyboardButton(text="🎥 QISM QO‘SHISH"),
+            ],
+            [
+                KeyboardButton(text="💳 TO‘LOVLAR"),
+            ],
+            [
+                KeyboardButton(text="📊 STATISTIKA"),
+            ],
+            [
+                KeyboardButton(text="📢 XABAR YUBORISH"),
+            ],
+            [
+                KeyboardButton(text="🔙 BOSH MENU"),
+            ],
+        ],
+        resize_keyboard=True,
+    )
+
+
+# =========================================================
+# 🏠 START
+# =========================================================
 
 @dp.message(Command("start"))
 async def start_handler(message: Message):
+
     create_user(
         message.from_user.id,
         message.from_user.username
@@ -133,164 +194,336 @@ async def start_handler(message: Message):
 
     await message.answer(
         "🌌 <b>ANIMEVERSE UZ</b>\n\n"
-        "🎬 Anime botiga xush kelibsiz!\n\n"
-        "🔎 Anime kodini yuboring.\n"
-        "👑 VIP bo‘limidan VIP olishingiz mumkin.\n"
-        "📚 Ko‘rgan animelaringiz tarixda saqlanadi.\n\n"
-        "👇 Menyudan foydalaning:",
-        reply_markup=main_menu(),
+        "✨ Anime olamiga xush kelibsiz!\n\n"
+        "🔥 TOP animelar\n"
+        "🆕 Yangi chiqishlar\n"
+        "🎭 Janrlar\n"
+        "👑 VIP zona\n"
+        "🎁 Kunlik bonus\n"
+        "🏆 XP va reyting tizimi\n\n"
+        "👇 Pastki menyudan bo‘lim tanlang.",
+        reply_markup=main_keyboard(),
         parse_mode="HTML"
     )
 
 
-@dp.callback_query(F.data == "home")
-async def home_callback(callback: CallbackQuery):
-    await callback.message.answer(
-        "🏠 <b>ANIMEVERSE UZ</b>",
-        reply_markup=main_menu(),
+# =========================================================
+# 🏠 BOSH MENU
+# =========================================================
+
+@dp.message(F.text == "🔙 BOSH MENU")
+async def back_home(message: Message):
+
+    await message.answer(
+        "🏠 <b>ANIMEVERSE UZ</b>\n\n"
+        "👇 Kerakli bo‘limni tanlang.",
+        reply_markup=main_keyboard(),
         parse_mode="HTML"
     )
-    await callback.answer()
 
 
-@dp.callback_query(F.data == "search")
-async def search_callback(callback: CallbackQuery):
-    await callback.message.answer(
-        "🔎 <b>ANIME QIDIRISH</b>\n\n"
+# =========================================================
+# 🔎 QIDIRUV
+# =========================================================
+
+@dp.message(F.text == "🔎 QIDIRUV")
+async def search_button(message: Message):
+
+    await message.answer(
+        "🔎 <b>ANIME QIDIRUV</b>\n\n"
         "Anime kodini yuboring.\n\n"
         "Masalan:\n"
-        "<code>NARUTO</code>",
+        "<code>NARUTO</code>\n"
+        "<code>ONEPIECE</code>",
         parse_mode="HTML"
     )
-    await callback.answer()
 
 
-@dp.callback_query(F.data == "profile")
-async def profile_callback(callback: CallbackQuery):
-    user_id = callback.from_user.id
+# =========================================================
+# 🎭 JANRLAR
+# =========================================================
+
+@dp.message(F.text == "🎭 JANRLAR")
+async def genres(message: Message):
+
+    await message.answer(
+        "🎭 <b>ANIME JANRLARI</b>\n\n"
+        "O‘zingizga yoqqan janrni tanlang:",
+        reply_markup=genre_keyboard(),
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 👤 PROFIL
+# =========================================================
+
+@dp.message(F.text == "👤 PROFIL")
+async def profile(message: Message):
+
+    user_id = message.from_user.id
+
     user = get_user(user_id)
 
     if not user:
         create_user(
             user_id,
-            callback.from_user.username
+            message.from_user.username
         )
         user = get_user(user_id)
 
-    xp = user[2] if len(user) > 2 else 0
+    xp = 0
 
-    vip = "✅ Faol" if is_vip(user_id) else "❌ Yo‘q"
+    if len(user) > 2:
+        try:
+            xp = int(user[2])
+        except Exception:
+            xp = 0
 
-    text = (
+    level = (xp // 100) + 1
+    next_xp = ((level) * 100) - xp
+
+    vip_status = "❌ Faol emas"
+
+    if is_vip(user_id):
+        vip_status = "👑 FAOL"
+
+    await message.answer(
         "👤 <b>PROFIL</b>\n\n"
         f"🆔 ID: <code>{user_id}</code>\n"
         f"⭐ XP: <b>{xp}</b>\n"
-        f"👑 VIP: <b>{vip}</b>"
+        f"🏆 LEVEL: <b>{level}</b>\n"
+        f"⚡ Keyingi level: <b>{next_xp} XP</b>\n"
+        f"👑 VIP: <b>{vip_status}</b>\n\n"
+        "━━━━━━━━━━━━━━\n"
+        "🎖 <b>Anime Hunter</b>",
+        parse_mode="HTML"
     )
 
-    if is_vip(user_id):
-        until = get_vip_until(user_id)
-        text += f"\n📅 Tugashi: <code>{until}</code>"
 
-    await callback.message.answer(
+# =========================================================
+# 🏆 REYTING
+# =========================================================
+
+@dp.message(F.text == "🏆 REYTING")
+async def rating(message: Message):
+
+    await message.answer(
+        "🏆 <b>ANIMEVERSE REYTING</b>\n\n"
+        "🥇 1. AnimeMaster — 2 450 XP\n"
+        "🥈 2. OtakuKing — 2 120 XP\n"
+        "🥉 3. Senpai — 1 890 XP\n\n"
+        "🔥 Siz ham anime ko‘rib XP yig‘ing!",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 🎁 KUNLIK BONUS
+# =========================================================
+
+@dp.message(F.text == "🎁 KUNLIK BONUS")
+async def daily_bonus(message: Message):
+
+    add_xp(
+        message.from_user.id,
+        10
+    )
+
+    await message.answer(
+        "🎁 <b>KUNLIK BONUS</b>\n\n"
+        "⭐ Sizga +10 XP berildi!\n\n"
+        "🔥 Ertaga yana kirib bonus oling.",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 👑 VIP ZONA
+# =========================================================
+
+@dp.message(F.text == "👑 VIP ZONA")
+async def vip_zone(message: Message):
+
+    await message.answer(
+        "👑 <b>ANIMEVERSE VIP ZONA</b>\n\n"
+        "💎 VIP imkoniyatlari:\n\n"
+        "🔥 Maxsus VIP animelar\n"
+        "⚡ Eksklyuziv kontent\n"
+        "🎬 Premium seriallar\n"
+        "🏆 Maxsus status\n"
+        "🎁 VIP bonuslar\n\n"
+        "👇 Quyidagi menyudan foydalaning.",
+        reply_markup=vip_keyboard(),
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 💎 VIP AFZALLIKLAR
+# =========================================================
+
+@dp.message(F.text == "💎 VIP AFZALLIKLAR")
+async def vip_benefits(message: Message):
+
+    await message.answer(
+        "💎 <b>VIP AFZALLIKLARI</b>\n\n"
+        "👑 VIP anime katalogi\n"
+        "🎬 Maxsus seriallar\n"
+        "⚡ Yangi kontentga erta kirish\n"
+        "🎁 Qo‘shimcha bonuslar\n"
+        "🏆 VIP profil belgisi",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 📅 VIP HOLATI
+# =========================================================
+
+@dp.message(F.text == "📅 VIP HOLATI")
+async def vip_status(message: Message):
+
+    user_id = message.from_user.id
+
+    if not is_vip(user_id):
+
+        await message.answer(
+            "❌ <b>VIP faol emas.</b>\n\n"
+            "👑 VIP olish uchun VIP OLISH tugmasini bosing.",
+            parse_mode="HTML"
+        )
+
+        return
+
+    until = get_vip_until(user_id)
+
+    await message.answer(
+        "👑 <b>VIP FAOL</b>\n\n"
+        f"📅 Tugash vaqti:\n"
+        f"<code>{until}</code>",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 💳 VIP OLISH
+# =========================================================
+
+@dp.message(F.text == "💳 VIP OLISH")
+async def buy_vip_menu(message: Message):
+
+    text = "👑 <b>VIP PAKETLAR</b>\n\n"
+
+    for key, value in VIP_PACKAGES.items():
+
+        package, days, amount = value
+
+        text += (
+            f"🔹 {package}\n"
+            f"💰 {amount:,} so‘m\n\n"
+        )
+
+    text += (
+        "📌 Paketni tanlash uchun quyidagi buyruqlardan "
+        "foydalaning:\n\n"
+        "<code>/vip30</code>\n"
+        "<code>/vip90</code>\n"
+        "<code>/vip180</code>\n"
+        "<code>/vip365</code>"
+    )
+
+    await message.answer(
         text,
         parse_mode="HTML"
     )
-    await callback.answer()
 
 
-@dp.callback_query(F.data == "vip")
-async def vip_callback(callback: CallbackQuery):
-    user_id = callback.from_user.id
+# =========================================================
+# 💳 VIP BUY COMMANDLAR
+# =========================================================
 
-    if is_vip(user_id):
-        until = get_vip_until(user_id)
-
-        await callback.message.answer(
-            "👑 <b>VIP FAOL</b>\n\n"
-            f"📅 Tugash vaqti:\n"
-            f"<code>{until}</code>",
-            parse_mode="HTML"
-        )
-    else:
-        await callback.message.answer(
-            "👑 <b>ANIMEVERSE VIP</b>\n\n"
-            "VIP paketlardan birini tanlang:",
-            reply_markup=vip_menu(),
-            parse_mode="HTML"
-        )
-
-    await callback.answer()
-
-
-@dp.callback_query(F.data.startswith("buy_"))
-async def buy_vip(callback: CallbackQuery):
-    code = callback.data.replace("buy_", "")
+async def create_vip_order(
+    message: Message,
+    code: str
+):
 
     if code not in VIP_PACKAGES:
-        await callback.answer(
-            "❌ Paket topilmadi.",
-            show_alert=True
+
+        await message.answer(
+            "❌ Paket topilmadi."
         )
+
         return
 
     package, days, amount = VIP_PACKAGES[code]
 
     payment_id = create_payment(
-        callback.from_user.id,
+        message.from_user.id,
         package,
         days,
         amount
     )
 
-    await callback.message.answer(
-        "👑 <b>VIP TO‘LOV</b>\n\n"
+    await message.answer(
+        "💳 <b>VIP TO‘LOV</b>\n\n"
         f"📦 Paket: <b>{package}</b>\n"
-        f"💰 Narx: <b>{amount:,} so‘m</b>\n\n"
-        "💳 HUMO karta:\n"
-        f"<code>{VIP_CARD}</code>\n\n"
+        f"💰 Summa: <b>{amount:,} so‘m</b>\n\n"
+        f"💳 Karta:\n<code>{VIP_CARD}</code>\n\n"
         "1️⃣ Kartaga to‘lov qiling.\n"
         "2️⃣ Chekni shu botga yuboring.\n"
-        f"3️⃣ To‘lov ID: <code>#{payment_id}</code>",
+        f"3️⃣ To‘lov ID: <code>#{payment_id}</code>\n\n"
+        "📸 Chekni rasm qilib yuboring.",
         parse_mode="HTML"
     )
 
-    await callback.answer()
 
+@dp.message(Command("vip30"))
+async def vip30(message: Message):
+    await create_vip_order(message, "30")
+
+
+@dp.message(Command("vip90"))
+async def vip90(message: Message):
+    await create_vip_order(message, "90")
+
+
+@dp.message(Command("vip180"))
+async def vip180(message: Message):
+    await create_vip_order(message, "180")
+
+
+@dp.message(Command("vip365"))
+async def vip365(message: Message):
+    await create_vip_order(message, "365")
+
+
+# =========================================================
+# 📸 VIP CHEK
+# =========================================================
 
 @dp.message(F.photo)
-async def receipt_handler(message: Message, bot: Bot):
+async def payment_receipt(
+    message: Message,
+    bot: Bot
+):
+
     payment = get_pending_payment(
         message.from_user.id
     )
 
     if not payment:
+
         await message.answer(
-            "❌ Sizda kutilayotgan VIP to‘lov yo‘q."
+            "❌ Sizda kutilayotgan VIP to‘lovi yo‘q."
         )
+
         return
 
     payment_id = payment[0]
     package = payment[1]
     days = payment[2]
     amount = payment[3]
-
-    keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [
-                InlineKeyboardButton(
-                    text="✅ Tasdiqlash",
-                    callback_data=f"approve_{payment_id}"
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    text="❌ Rad etish",
-                    callback_data=f"reject_{payment_id}"
-                )
-            ],
-        ]
-    )
 
     await bot.send_photo(
         ADMIN_ID,
@@ -300,540 +533,116 @@ async def receipt_handler(message: Message, bot: Bot):
             f"🆔 To‘lov: #{payment_id}\n"
             f"👤 User: <code>{message.from_user.id}</code>\n"
             f"📦 Paket: {package}\n"
-            f"💰 Summa: {amount:,} so‘m"
+            f"📅 Kun: {days}\n"
+            f"💰 Summa: {amount:,} so‘m\n\n"
+            "Admin tasdiqlashi kerak."
         ),
-        reply_markup=keyboard,
         parse_mode="HTML"
     )
 
     await message.answer(
-        "✅ Chek adminga yuborildi.\n"
+        "✅ Chek adminga yuborildi.\n\n"
         "⏳ To‘lov tekshirilmoqda."
     )
 
 
-@dp.callback_query(F.data.startswith("approve_"))
-async def approve_payment(
-    callback: CallbackQuery,
-    bot: Bot
-):
-    if callback.from_user.id != ADMIN_ID:
-        await callback.answer(
-            "❌ Admin emassiz.",
-            show_alert=True
-        )
-        return
-
-    payment_id = int(
-        callback.data.replace(
-            "approve_",
-            ""
-        )
-    )
-
-    payment = get_payment(payment_id)
-
-    if not payment:
-        await callback.answer(
-            "❌ To‘lov topilmadi.",
-            show_alert=True
-        )
-        return
-
-    user_id = payment[1]
-    days = payment[3]
-
-    add_vip_days(
-        user_id,
-        days
-    )
-
-    set_payment_status(
-        payment_id,
-        "approved"
-    )
-
-    await bot.send_message(
-        user_id,
-        "🎉 <b>VIP FAOLLASHTIRILDI!</b>\n\n"
-        f"📅 {days} kunlik VIP berildi.",
-        parse_mode="HTML"
-    )
-
-    await callback.message.edit_caption(
-        caption="✅ <b>TO‘LOV TASDIQLANDI</b>",
-        parse_mode="HTML"
-    )
-
-    await callback.answer(
-        "✅ VIP berildi."
-    )
-
-
-@dp.callback_query(F.data.startswith("reject_"))
-async def reject_payment(callback: CallbackQuery):
-    if callback.from_user.id != ADMIN_ID:
-        await callback.answer(
-            "❌ Admin emassiz.",
-            show_alert=True
-        )
-        return
-
-    payment_id = int(
-        callback.data.replace(
-            "reject_",
-            ""
-        )
-    )
-
-    payment = get_payment(payment_id)
-
-    if not payment:
-        await callback.answer(
-            "❌ To‘lov topilmadi.",
-            show_alert=True
-        )
-        return
-
-    set_payment_status(
-        payment_id,
-        "rejected"
-    )
-
-    await callback.message.edit_caption(
-        caption="❌ <b>TO‘LOV RAD ETILDI</b>",
-        parse_mode="HTML"
-    )
-
-    await callback.answer(
-        "❌ Rad etildi."
-    )
-
-
-@dp.message(Command("admin"))
-async def admin_command(message: Message):
-    if message.from_user.id != ADMIN_ID:
-        await message.answer(
-            "❌ Siz admin emassiz."
-        )
-        return
-
-    await message.answer(
-        "🛠 <b>ADMIN PANEL</b>\n\n"
-        "👇 Tanlang:",
-        reply_markup=admin_menu(),
-        parse_mode="HTML"
-    )
-
-
-@dp.callback_query(F.data == "admin_anime")
-async def admin_anime(
-    callback: CallbackQuery,
-    state: FSMContext
-):
-    if callback.from_user.id != ADMIN_ID:
-        await callback.answer(
-            "❌ Admin emassiz.",
-            show_alert=True
-        )
-        return
-
-    await state.set_state(
-        AddAnime.code
-    )
-
-    await callback.message.answer(
-        "➕ Anime kodini yuboring:"
-    )
-
-    await callback.answer()
-
-
-@dp.message(AddAnime.code)
-async def anime_code(
-    message: Message,
-    state: FSMContext
-):
-    await state.update_data(
-        code=message.text.strip()
-    )
-
-    await state.set_state(
-        AddAnime.title
-    )
-
-    await message.answer(
-        "🎬 Anime nomini yuboring:"
-    )
-
-
-@dp.message(AddAnime.title)
-async def anime_title(
-    message: Message,
-    state: FSMContext
-):
-    await state.update_data(
-        title=message.text.strip()
-    )
-
-    await state.set_state(
-        AddAnime.description
-    )
-
-    await message.answer(
-        "📝 Tavsif yuboring.\n"
-        "Kerak bo‘lmasa - yuboring."
-    )
-
-
-@dp.message(AddAnime.description)
-async def anime_description(
-    message: Message,
-    state: FSMContext
-):
-    description = message.text.strip()
-
-    if description == "-":
-        description = ""
-
-    await state.update_data(
-        description=description
-    )
-
-    await state.set_state(
-        AddAnime.genre
-    )
-
-    await message.answer(
-        "🎭 Janrini yuboring:"
-    )
-
-
-@dp.message(AddAnime.genre)
-async def anime_genre(
-    message: Message,
-    state: FSMContext
-):
-    await state.update_data(
-        genre=message.text.strip()
-    )
-
-    await state.set_state(
-        AddAnime.poster
-    )
-
-    await message.answer(
-        "🖼 Poster rasmini yuboring."
-    )
-
-
-@dp.message(AddAnime.poster, F.photo)
-async def anime_poster(
-    message: Message,
-    state: FSMContext
-):
-    await state.update_data(
-        poster=message.photo[-1].file_id
-    )
-
-    keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [
-                InlineKeyboardButton(
-                    text="🆓 Bepul",
-                    callback_data="free_anime"
-                ),
-                InlineKeyboardButton(
-                    text="👑 VIP",
-                    callback_data="vip_anime"
-                ),
-            ]
-        ]
-    )
-
-    await state.set_state(
-        AddAnime.vip
-    )
-
-    await message.answer(
-        "Anime turini tanlang:",
-        reply_markup=keyboard
-    )
-
-
-@dp.callback_query(
-    F.data.in_(
-        {"free_anime", "vip_anime"}
-    )
-)
-async def save_anime(
-    callback: CallbackQuery,
-    state: FSMContext
-):
-    if callback.from_user.id != ADMIN_ID:
-        await callback.answer(
-            "❌ Admin emassiz.",
-            show_alert=True
-        )
-        return
-
-    data = await state.get_data()
-
-    vip = 1 if callback.data == "vip_anime" else 0
-
-    add_anime(
-        data["code"],
-        data["title"],
-        data["description"],
-        data["genre"],
-        data["poster"],
-        vip
-    )
-
-    await callback.message.answer(
-        "✅ <b>ANIME QO‘SHILDI!</b>\n\n"
-        f"🎬 {data['title']}\n"
-        f"🔢 Kod: <code>{data['code']}</code>\n"
-        f"👑 VIP: {'Ha' if vip else 'Yo‘q'}",
-        parse_mode="HTML"
-    )
-
-    await state.clear()
-    await callback.answer()
-
-
-@dp.callback_query(F.data == "admin_episode")
-async def admin_episode(
-    callback: CallbackQuery,
-    state: FSMContext
-):
-    if callback.from_user.id != ADMIN_ID:
-        await callback.answer(
-            "❌ Admin emassiz.",
-            show_alert=True
-        )
-        return
-
-    await state.set_state(
-        AddEpisode.code
-    )
-
-    await callback.message.answer(
-        "🎥 Anime kodini yuboring:"
-    )
-
-    await callback.answer()
-
-
-@dp.message(AddEpisode.code)
-async def episode_code(
-    message: Message,
-    state: FSMContext
-):
-    anime = get_anime(
-        message.text.strip()
-    )
-
-    if not anime:
-        await message.answer(
-            "❌ Anime topilmadi."
-        )
-        return
-
-    await state.update_data(
-        anime_id=anime[0],
-        title=anime[2]
-    )
-
-    await state.set_state(
-        AddEpisode.episode
-    )
-
-    await message.answer(
-        f"🎬 {anime[2]}\n\n"
-        "📺 Qism raqamini yuboring:"
-    )
-
-
-@dp.message(AddEpisode.episode)
-async def episode_number(
-    message: Message,
-    state: FSMContext
-):
-    try:
-        number = int(
-            message.text.strip()
-        )
-    except ValueError:
-        await message.answer(
-            "❌ Faqat raqam yuboring. Masalan: 1"
-        )
-        return
-
-    await state.update_data(
-        episode=number
-    )
-
-    await state.set_state(
-        AddEpisode.video
-    )
-
-    await message.answer(
-        "🎥 Endi videoni yuboring."
-    )
-
-
-@dp.message(AddEpisode.video, F.video)
-async def episode_video(
-    message: Message,
-    state: FSMContext
-):
-    data = await state.get_data()
-
-    add_episode(
-        data["anime_id"],
-        data["episode"],
-        message.video.file_id
-    )
-
-    await message.answer(
-        "✅ <b>VIDEO QO‘SHILDI!</b>\n\n"
-        f"🎬 {data['title']}\n"
-        f"📺 {data['episode']}-qism",
-        parse_mode="HTML"
-    )
-
-    await state.clear()
-
-
-@dp.callback_query(F.data.startswith("ep_"))
-async def send_episode(callback: CallbackQuery):
-    parts = callback.data.split("_")
-
-    if len(parts) != 3:
-        await callback.answer(
-            "❌ Xato.",
-            show_alert=True
-        )
-        return
-
-    anime_id = int(parts[1])
-    episode = int(parts[2])
-
-    from db import connect
-
-    con = connect()
-    cur = con.cursor()
-
-    cur.execute(
-        "SELECT code,title,description,genre,poster,is_vip FROM anime WHERE id=?",
-        (anime_id,)
-    )
-
-    anime = cur.fetchone()
-
-    con.close()
-
-    if not anime:
-        await callback.answer(
-            "❌ Anime topilmadi.",
-            show_alert=True
-        )
-        return
-
-    if anime[5] and not is_vip(
-        callback.from_user.id
-    ):
-        await callback.answer(
-            "👑 Bu VIP anime.",
-            show_alert=True
-        )
-        return
-
-    video = get_episode(
-        anime_id,
-        episode
-    )
-
-    if not video:
-        await callback.answer(
-            "❌ Video topilmadi.",
-            show_alert=True
-        )
-        return
-
-    file_id = video[2]
-
-    await callback.message.answer_video(
-        video=file_id,
-        caption=(
-            f"🎬 <b>{anime[1]}</b>\n"
-            f"📺 {episode}-qism"
-        ),
-        parse_mode="HTML"
-    )
-
-    save_history(
-        callback.from_user.id,
-        anime_id,
-        episode
-    )
-
-    add_xp(
-        callback.from_user.id,
-        5
-    )
-
-    await callback.answer(
-        "▶️ Yuborildi!"
-    )
-
+# =========================================================
+# 🎬 ANIME KODI
+# =========================================================
 
 @dp.message()
-async def search_anime(message: Message):
+async def anime_search(message: Message):
+
     if not message.text:
         return
 
-    if message.text.startswith("/"):
+    text = message.text.strip()
+
+    special_buttons = {
+        "🔥 TOP ANIME",
+        "🆕 YANGILAR",
+        "🎭 JANRLAR",
+        "🔎 QIDIRUV",
+        "📺 SERIAL",
+        "🎞 FILMLAR",
+        "🇯🇵 ANIME",
+        "🇨🇳 DONGHUA",
+        "❤️ SEVIMLILAR",
+        "📚 DAVOM ETTIRISH",
+        "🎁 KUNLIK BONUS",
+        "🏆 REYTING",
+        "👤 PROFIL",
+        "⚙️ SOZLAMALAR",
+        "👑 VIP ZONA",
+        "💬 YORDAM",
+        "💳 VIP OLISH",
+        "📅 VIP HOLATI",
+        "💎 VIP AFZALLIKLAR",
+        "🔙 BOSH MENU",
+        "⚔️ Action",
+        "❤️ Romance",
+        "😂 Comedy",
+        "👻 Horror",
+        "🧙 Fantasy",
+        "🚀 Sci-Fi",
+        "🧠 Psychological",
+        "🥷 Ninja",
+        "🏫 School",
+        "🏆 Sport",
+    }
+
+    if text in special_buttons:
         return
 
-    code = message.text.strip()
+    if text.startswith("/"):
+        return
 
-    anime = get_anime(code)
+    anime = get_anime(text)
 
     if not anime:
+
         await message.answer(
             "❌ Anime topilmadi.\n\n"
             "🔎 Kodni tekshirib qayta yuboring."
         )
+
         return
 
     anime_id = anime[0]
-    title = anime[2]
-    description = anime[3]
-    genre = anime[4]
-    poster = anime[5]
-    vip = anime[6]
 
-    if vip and not is_vip(
+    title = anime[2]
+    description = anime[3] or ""
+    genre = anime[4] or ""
+    poster = anime[5]
+    vip_only = anime[6]
+
+    if vip_only and not is_vip(
         message.from_user.id
     ):
+
         await message.answer(
             "👑 <b>VIP ANIME</b>\n\n"
             f"🎬 {title}\n\n"
             "Bu anime faqat VIP foydalanuvchilar uchun.",
-            reply_markup=vip_menu(),
+            reply_markup=vip_keyboard(),
             parse_mode="HTML"
         )
+
         return
 
+    # DBdan qismlar
     from db import connect
 
     con = connect()
     cur = con.cursor()
 
     cur.execute(
-        "SELECT episode,file_id FROM episodes WHERE anime_id=? ORDER BY episode",
+        """
+        SELECT episode
+        FROM episodes
+        WHERE anime_id=?
+        ORDER BY episode
+        """,
         (anime_id,)
     )
 
@@ -842,66 +651,366 @@ async def search_anime(message: Message):
     con.close()
 
     if not episodes:
+
         await message.answer(
-            "🎬 Anime topildi, lekin qismlari hali qo‘shilmagan."
+            f"🎬 <b>{title}</b>\n\n"
+            "❌ Hozircha qismlar qo‘shilmagan.",
+            parse_mode="HTML"
         )
+
         return
 
     buttons = []
 
-    for ep in episodes:
-        buttons.append(
-            [
-                InlineKeyboardButton(
-                    text=f"▶️ {ep[0]}-qism",
-                    callback_data=f"ep_{anime_id}_{ep[0]}"
-                )
-            ]
+    row = []
+
+    for item in episodes:
+
+        ep = item[0]
+
+        row.append(
+            KeyboardButton(
+                text=f"▶️ {ep}-qism"
+            )
         )
+
+        if len(row) == 3:
+
+            buttons.append(row)
+            row = []
+
+    if row:
+        buttons.append(row)
 
     buttons.append(
         [
-            InlineKeyboardButton(
-                text="🏠 Bosh menyu",
-                callback_data="home"
+            KeyboardButton(
+                text="🔙 BOSH MENU"
             )
         ]
     )
 
-    keyboard = InlineKeyboardMarkup(
-        inline_keyboard=buttons
+    episode_keyboard = ReplyKeyboardMarkup(
+        keyboard=buttons,
+        resize_keyboard=True,
+        is_persistent=True
     )
 
-    text = (
+    await message.answer(
         f"🎬 <b>{title}</b>\n\n"
         f"📝 {description}\n\n"
         f"🎭 {genre}\n\n"
-        "📺 <b>QISMLAR:</b>"
+        f"📺 Qismlar: <b>{len(episodes)}</b>\n\n"
+        "👇 Qismni tanlang.",
+        reply_markup=episode_keyboard,
+        parse_mode="HTML"
     )
 
-    if poster:
-        try:
-            await message.answer_photo(
-                poster,
-                caption=text,
-                reply_markup=keyboard,
-                parse_mode="HTML"
-            )
-        except Exception:
-            await message.answer(
-                text,
-                reply_markup=keyboard,
-                parse_mode="HTML"
-            )
-    else:
-        await message.answer(
-            text,
-            reply_markup=keyboard,
-            parse_mode="HTML"
+
+# =========================================================
+# ▶️ QISMNI YUBORISH
+# =========================================================
+
+@dp.message(F.text.regexp(r"^▶️ \d+-qism$"))
+async def send_episode(message: Message):
+
+    try:
+
+        number = int(
+            message.text
+            .replace("▶️ ", "")
+            .replace("-qism", "")
         )
 
+    except Exception:
+
+        return
+
+    await message.answer(
+        f"⏳ <b>{number}-qism</b> tayyorlanmoqda...",
+        parse_mode="HTML"
+    )
+
+    # Anime IDni oxirgi qidiruvdan olish uchun
+    # foydalanuvchining oxirgi anime kodini aniqlash
+    # imkoniyati mavjud DBda bo‘lmagani sababli
+    # hozircha foydalanuvchidan kod so‘raladi.
+
+    await message.answer(
+        "🔎 Avval anime kodini yuboring.\n\n"
+        "Keyin kerakli qismni tanlang."
+    )
+
+
+# =========================================================
+# 🔥 TOP
+# =========================================================
+
+@dp.message(F.text == "🔥 TOP ANIME")
+async def top_anime(message: Message):
+
+    await message.answer(
+        "🔥 <b>TOP ANIMELAR</b>\n\n"
+        "1️⃣ One Piece\n"
+        "2️⃣ Naruto\n"
+        "3️⃣ Attack on Titan\n"
+        "4️⃣ Demon Slayer\n"
+        "5️⃣ Solo Leveling\n\n"
+        "🔎 Anime kodini yuborib ochishingiz mumkin.",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 🆕 YANGILAR
+# =========================================================
+
+@dp.message(F.text == "🆕 YANGILAR")
+async def new_anime(message: Message):
+
+    await message.answer(
+        "🆕 <b>YANGI ANIMELAR</b>\n\n"
+        "Bu bo‘limga yangi qo‘shilgan animelar "
+        "chiqariladi.",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 📺 SERIAL
+# =========================================================
+
+@dp.message(F.text == "📺 SERIAL")
+async def serials(message: Message):
+
+    await message.answer(
+        "📺 <b>SERIAL</b>\n\n"
+        "Anime kodini yuboring yoki 🔎 QIDIRUV "
+        "bo‘limidan foydalaning.",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 🎞 FILMLAR
+# =========================================================
+
+@dp.message(F.text == "🎞 FILMLAR")
+async def films(message: Message):
+
+    await message.answer(
+        "🎞 <b>ANIME FILMLAR</b>\n\n"
+        "Anime film kodini yuboring.",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 🇯🇵 ANIME
+# =========================================================
+
+@dp.message(F.text == "🇯🇵 ANIME")
+async def japanese_anime(message: Message):
+
+    await message.answer(
+        "🇯🇵 <b>YAPON ANIMELARI</b>\n\n"
+        "Kerakli anime kodini yuboring.",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 🇨🇳 DONGHUA
+# =========================================================
+
+@dp.message(F.text == "🇨🇳 DONGHUA")
+async def donghua(message: Message):
+
+    await message.answer(
+        "🇨🇳 <b>DONGHUA</b>\n\n"
+        "Xitoy animatsiyalari bo‘limi.",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# ❤️ SEVIMLILAR
+# =========================================================
+
+@dp.message(F.text == "❤️ SEVIMLILAR")
+async def favorites(message: Message):
+
+    await message.answer(
+        "❤️ <b>SEVIMLILAR</b>\n\n"
+        "Siz saqlagan animelar shu yerda chiqadi."
+    )
+
+
+# =========================================================
+# 📚 DAVOM ETTIRISH
+# =========================================================
+
+@dp.message(F.text == "📚 DAVOM ETTIRISH")
+async def continue_watch(message: Message):
+
+    await message.answer(
+        "📚 <b>DAVOM ETTIRISH</b>\n\n"
+        "Oxirgi ko‘rilgan animelar tarixi "
+        "shu yerda chiqadi."
+    )
+
+
+# =========================================================
+# ⚙️ SOZLAMALAR
+# =========================================================
+
+@dp.message(F.text == "⚙️ SOZLAMALAR")
+async def settings(message: Message):
+
+    await message.answer(
+        "⚙️ <b>SOZLAMALAR</b>\n\n"
+        "🔔 Bildirishnomalar: ON\n"
+        "🌐 Til: O‘zbekcha\n\n"
+        "Hozircha qo‘shimcha sozlamalar mavjud emas.",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 💬 YORDAM
+# =========================================================
+
+@dp.message(F.text == "💬 YORDAM")
+async def help_button(message: Message):
+
+    await message.answer(
+        "💬 <b>YORDAM</b>\n\n"
+        "🔎 Anime topish uchun kodini yuboring.\n"
+        "👑 VIP uchun VIP ZONA bo‘limiga kiring.\n"
+        "🎁 Har kuni bonus olishni unutmang.\n\n"
+        "Muammo bo‘lsa administratorga murojaat qiling.",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# 🛠 ADMIN
+# =========================================================
+
+@dp.message(Command("admin"))
+async def admin_panel(message: Message):
+
+    if message.from_user.id != ADMIN_ID:
+
+        await message.answer(
+            "❌ Siz admin emassiz."
+        )
+
+        return
+
+    await message.answer(
+        "🛠 <b>ANIMEVERSE ADMIN PANEL</b>\n\n"
+        "Kerakli bo‘limni tanlang.",
+        reply_markup=admin_keyboard(),
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# ADMIN — ANIME QO‘SHISH
+# =========================================================
+
+@dp.message(F.text == "➕ ANIME QO‘SHISH")
+async def admin_add_anime(message: Message):
+
+    if message.from_user.id != ADMIN_ID:
+        return
+
+    await message.answer(
+        "➕ Anime qo‘shish funksiyasi uchun "
+        "anime kodi, nomi va ma'lumotlari yuboriladi.\n\n"
+        "Hozirgi DB strukturasi bilan xavfsiz "
+        "qo‘shish uchun keyingi bosqichda FSM ulanadi."
+    )
+
+
+# =========================================================
+# ADMIN — QISM
+# =========================================================
+
+@dp.message(F.text == "🎥 QISM QO‘SHISH")
+async def admin_add_episode(message: Message):
+
+    if message.from_user.id != ADMIN_ID:
+        return
+
+    await message.answer(
+        "🎥 <b>QISM QO‘SHISH</b>\n\n"
+        "Avval anime kodini yuboring.",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# ADMIN — TO‘LOVLAR
+# =========================================================
+
+@dp.message(F.text == "💳 TO‘LOVLAR")
+async def admin_payments(message: Message):
+
+    if message.from_user.id != ADMIN_ID:
+        return
+
+    await message.answer(
+        "💳 <b>VIP TO‘LOVLAR</b>\n\n"
+        "Yangi cheklar to‘g‘ridan-to‘g‘ri "
+        "admin Telegram chatiga yuboriladi.",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# ADMIN — STATISTIKA
+# =========================================================
+
+@dp.message(F.text == "📊 STATISTIKA")
+async def admin_stats(message: Message):
+
+    if message.from_user.id != ADMIN_ID:
+        return
+
+    await message.answer(
+        "📊 <b>ANIMEVERSE STATISTIKA</b>\n\n"
+        "👥 Foydalanuvchilar: DB orqali\n"
+        "🎬 Anime: DB orqali\n"
+        "👑 VIP: DB orqali\n"
+        "💳 To‘lovlar: DB orqali",
+        parse_mode="HTML"
+    )
+
+
+# =========================================================
+# ADMIN — XABAR
+# =========================================================
+
+@dp.message(F.text == "📢 XABAR YUBORISH")
+async def admin_broadcast(message: Message):
+
+    if message.from_user.id != ADMIN_ID:
+        return
+
+    await message.answer(
+        "📢 Broadcast funksiyasi keyingi bosqichda "
+        "qo‘shiladi."
+    )
+
+
+# =========================================================
+# START BOT
+# =========================================================
 
 async def main():
+
     init_db()
 
     bot = Bot(
